@@ -1,1 +1,1 @@
-# cryptend-app
+# Cryptend

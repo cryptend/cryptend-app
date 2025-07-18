@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block main %}
+<form method="post">
+  <fieldset class="fieldset max-w-sm mx-auto">
+    <label class="label">Interlocutor's configuration</label>
+    <textarea name="conf" class="textarea w-full" placeholder="Interlocutor's configuration" required></textarea>
+    <label class="label">Password</label>
+    <input type="password" name="password" class="input w-full" placeholder="Password" required>
+    <button type="submit" class="btn btn-secondary mt-4">Accept chat</button>
+  </fieldset>
+</form>
+{% include 'output.html' %}
+{% endblock %}

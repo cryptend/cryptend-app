@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ request.host }}</title>
+  <link rel="icon" type="image/png" href="/static/img/logo.png">
+  <link rel="stylesheet" href="/static/css/output.min.css">
+  <script defer src="/static/js/main.js"></script>
+</head>
+<body>
+  <div class="px-3 pb-10">
+    <div class="text-center font-bold pt-1 pb-5">
+      <a href="/" class="link link-hover">Cryptend</a>
+    </div>
+    {% block main %}{% endblock %}
+  </div>
+</body>
+</html>

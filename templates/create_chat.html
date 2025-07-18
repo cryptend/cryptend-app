@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block main %}
+<form method="post">
+  <fieldset class="fieldset max-w-sm mx-auto">
+    <label class="label">Key size [Bit]</label>
+    <input type="number" name="key_size" class="input w-full" min="1024" value="1024" required>
+    <label class="label">Iterations</label>
+    <input type="number" name="iterations" class="input w-full" min="1" value="10" required>
+    <label class="label">Memory [MiB]</label>
+    <input type="number" name="memory" class="input w-full" min="1" value="64" required>
+    <label class="label">Parallelism</label>
+    <input type="number" name="parallelism" class="input w-full" min="1" value="4" required>
+    <label class="label">Password</label>
+    <input type="password" name="password" class="input w-full" placeholder="Password" required>
+    <button type="submit" class="btn btn-secondary mt-4">
+      <span>Create chat</span>
+      <span class="loading loading-spinner text-secondary hidden"></span>
+    </button>
+  </fieldset>
+</form>
+{% include 'output.html' %}
+{% endblock %}

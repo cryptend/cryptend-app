@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block main %}
+<form method="post">
+  <fieldset class="fieldset max-w-sm mx-auto">
+    <label class="label">Interlocutor's configuration</label>
+    <textarea name="conf" class="textarea w-full" placeholder="Interlocutor's configuration" required></textarea>
+    <button type="submit" class="btn btn-secondary mt-4">Add chat</button>
+  </fieldset>
+</form>
+{% endblock %}

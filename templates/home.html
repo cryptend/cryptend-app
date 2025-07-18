@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="max-w-lg mx-auto">
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+    <a href="/1" class="btn">Create chat</a>
+    <a href="/2" class="btn">Accept chat</a>
+    <a href="/3" class="btn">Add chat</a>
+  </div>
+  <div class="grid grid-cols-1 gap-2 pt-3">
+  {% for name, number in chats %}
+  <div class="card card-border">
+    <div class="card-body p-4">
+      <h2 class="card-title break-all">
+        <a href="/{{ name }}" class="link link-hover">{{ name }}</a>
+      </h2>
+      <p class="text-base-content/70">{{ number }} {% if number == 1 %}message{% else %}messages{% endif %}</p>
+      <div class="card-actions justify-end">
+        <a href="/{{ name }}" class="btn">Open chat</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  </div>
+</div>
+{% endblock %}

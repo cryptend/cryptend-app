@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block main %}
+<form method="post">
+  <fieldset class="fieldset max-w-sm mx-auto">
+    <label class="label">Chat name</label>
+    <div class="text-sm break-all">{{ name }}</div>
+    <label class="label">Message</label>
+    <textarea name="message" class="textarea w-full" placeholder="Message" required></textarea>
+    <label class="label">Password</label>
+    <input type="password" name="password" class="input w-full" placeholder="Password" required>
+    <label class="label text-current text-sm w-fit py-1">
+      <input type="radio" name="operation" class="radio" value="encrypt" checked>Encrypt
+    </label>
+    <label class="label text-current text-sm w-fit">
+      <input type="radio" name="operation" class="radio" value="decrypt">Decrypt
+    </label>
+    <button type="submit" class="btn btn-secondary mt-4">
+      <span>Add message</span>
+      <span class="loading loading-spinner text-secondary hidden"></span>
+    </button>
+  </fieldset>
+</form>
+{% include 'output.html' %}
+{% endblock %}

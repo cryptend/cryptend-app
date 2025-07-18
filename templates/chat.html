@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class="max-w-xl mx-auto">
+  <div class="text-center text-sm text-base-content/70 break-all pb-2">
+    <a href="/{{ name }}" class="link link-hover">{{ name }}</a>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pb-3">
+    <button class="btn" onclick="modal.showModal()">Decrypt chat</button>
+    <a href="/{{ name }}/1" class="btn" target="_blank">Add message <span class="text-base-content/30">🡥</span></a>
+  </div>
+  {% for type, message in messages %}
+  {% if type == 1 %}
+  <div class="chat chat-end">
+    <div class="chat-bubble chat-bubble-neutral{% if encrypted %} break-all{% endif %}">{{ message }}</div>
+  </div>
+  {% elif type == 2 %}
+  <div class="chat chat-start">
+    <div class="chat-bubble{% if encrypted %} break-all{% endif %}">{{ message }}</div>
+  </div>
+  {% endif %}
+  {% endfor %}
+</div>
+<dialog id="modal" class="modal">
+  <div class="modal-box max-w-sm p-4">
+    <form method="post">
+      <fieldset class="fieldset">
+        <label class="label">Password</label>
+        <input type="password" name="password" class="input w-full" placeholder="Password" required>
+        <button type="submit" class="btn btn-secondary mt-4">
+          <span>Decrypt chat</span>
+          <span class="loading loading-spinner text-secondary hidden"></span>
+        </button>
+      </fieldset>
+    </form>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+{% endblock %}
