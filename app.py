@@ -121,7 +121,7 @@ def save_chat(name: str, data: dict) -> None:
         os.makedirs('backup')
     path = os.path.join('backup', f'{name}.json')
     with open(path, 'w', encoding='utf-8') as file:
-        json.dump(data, file, indent=4)
+        json.dump(data, file, indent=2)
 
 
 app = Flask(__name__)

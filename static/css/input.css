@@ -1,5 +1,5 @@
 @import "tailwindcss" source(none);
 @source "../../templates";
 @plugin "daisyui" {
-    themes: dracula --default --prefersdark;
+  themes: dracula --default;
 }
