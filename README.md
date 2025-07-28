@@ -4,7 +4,7 @@ End-to-end encryption messaging tool for desktop.
 
 ## Installing
 
-1. Download [Cryptend](https://github.com/cryptend/cryptend-app) and unzip it
+1. Download [Cryptend](https://github.com/cryptend/cryptend-app/archive/refs/heads/main.zip) and unzip it
 2. Install [Python](https://www.python.org/downloads/)
 3. Run `install.bat` (`pip install -r requirements.txt`)
 4. Run `Cryptend.bat` (`flask run`)
@@ -30,4 +30,4 @@ End-to-end encryption messaging tool for desktop.
 ### Development
 
 - [tailwindcss](https://github.com/tailwindlabs/tailwindcss) `4.1.11`
-- [daisyui](https://github.com/saadeghi/daisyui) `5.0.46`
+- [daisyui](https://github.com/saadeghi/daisyui) `5.0.48`

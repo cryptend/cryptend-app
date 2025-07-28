@@ -1,9 +1,10 @@
 import base64
 import json
+import math
 import os
 import random
 import uuid
-from cryptography.hazmat.primitives import padding, hashes
+from cryptography.hazmat.primitives import hashes, padding
 from cryptography.hazmat.primitives.asymmetric import dh
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
@@ -21,7 +22,8 @@ def generate_salt_b64() -> str:
 
 
 def get_private_key(password: str, p: int) -> int:
-    digest = hashes.Hash(hashes.SHAKE256(p.bit_length() // 8))
+    digest_size = math.floor(p.bit_length() / 8)
+    digest = hashes.Hash(hashes.SHAKE256(digest_size))
     digest.update(password.encode())
     return int.from_bytes(digest.finalize())
 
@@ -49,16 +51,17 @@ def get_encryption_key(
         lanes=parallelism,
         memory_cost=memory * 1024,
     )
-    return kdf.derive(str(shared_key).encode())
+    length = math.ceil(shared_key.bit_length() / 8)
+    return kdf.derive(shared_key.to_bytes(length))
 
 
 def encrypt_message(plaintext: str, key: bytes) -> str:
     iv = os.urandom(16)
     cipher = Cipher(algorithms.AES256(key), modes.CBC(iv))
     encryptor = cipher.encryptor()
-    padder = padding.PKCS7(128).padder()
-    padded = padder.update(plaintext.encode()) + padder.finalize()
-    ciphertext = encryptor.update(padded) + encryptor.finalize()
+    padder = padding.PKCS7(algorithms.AES256.block_size).padder()
+    padded_data = padder.update(plaintext.encode()) + padder.finalize()
+    ciphertext = encryptor.update(padded_data) + encryptor.finalize()
     iv_b64 = base64.b64encode(iv).decode()
     ciphertext_b64 = base64.b64encode(ciphertext).decode()
     return '_'.join([iv_b64, ciphertext_b64])
@@ -70,9 +73,9 @@ def decrypt_message(message: str, key: bytes) -> str:
     ciphertext = base64.b64decode(message_list[1])
     cipher = Cipher(algorithms.AES256(key), modes.CBC(iv))
     decryptor = cipher.decryptor()
-    padded = decryptor.update(ciphertext) + decryptor.finalize()
-    unpadder = padding.PKCS7(128).unpadder()
-    plaintext = unpadder.update(padded) + unpadder.finalize()
+    padded_data = decryptor.update(ciphertext) + decryptor.finalize()
+    unpadder = padding.PKCS7(algorithms.AES256.block_size).unpadder()
+    plaintext = unpadder.update(padded_data) + unpadder.finalize()
     return plaintext.decode()
 
 
@@ -112,16 +115,16 @@ def get_chat(name: str) -> dict:
     if not os.path.exists('backup'):
         os.makedirs('backup')
     path = os.path.join('backup', f'{name}.json')
-    with open(path, 'r', encoding='utf-8') as file:
-        return json.load(file)
+    with open(path, 'r', encoding='utf-8') as f:
+        return json.load(f)
 
 
 def save_chat(name: str, data: dict) -> None:
     if not os.path.exists('backup'):
         os.makedirs('backup')
     path = os.path.join('backup', f'{name}.json')
-    with open(path, 'w', encoding='utf-8') as file:
-        json.dump(data, file, indent=2)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2)
 
 
 app = Flask(__name__)
