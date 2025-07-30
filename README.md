@@ -17,7 +17,7 @@ End-to-end encryption messaging tool for desktop.
 
 ## Algorithm
 
-1. SHAKE256 to convert a password to a private key
+1. Argon2id to convert a password to a private key
 2. Diffie-hellman key exchange to get a shared key
 3. Argon2id to get the encryption key
 4. AES-256 (CBC) for message encryption

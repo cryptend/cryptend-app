@@ -3,8 +3,7 @@ import json
 import math
 import os
 import random
-import uuid
-from cryptography.hazmat.primitives import hashes, padding
+from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.asymmetric import dh
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
@@ -21,11 +20,15 @@ def generate_salt_b64() -> str:
     return base64.b64encode(os.urandom(32)).decode()
 
 
-def get_private_key(password: str, p: int) -> int:
-    digest_size = math.floor(p.bit_length() / 8)
-    digest = hashes.Hash(hashes.SHAKE256(digest_size))
-    digest.update(password.encode())
-    return int.from_bytes(digest.finalize())
+def get_private_key(salt_b64: str, p: int, password: str) -> int:
+    kdf = Argon2id(
+        salt=base64.b64decode(salt_b64),
+        length=math.floor(p.bit_length() / 8),
+        iterations=1,
+        lanes=4,
+        memory_cost=64 * 1024,
+    )
+    return int.from_bytes(kdf.derive(password.encode()))
 
 
 def get_public_key(g: int, private_key: int, p: int) -> int:
@@ -64,13 +67,12 @@ def encrypt_message(plaintext: str, key: bytes) -> str:
     ciphertext = encryptor.update(padded_data) + encryptor.finalize()
     iv_b64 = base64.b64encode(iv).decode()
     ciphertext_b64 = base64.b64encode(ciphertext).decode()
-    return '_'.join([iv_b64, ciphertext_b64])
+    return iv_b64 + ciphertext_b64
 
 
 def decrypt_message(message: str, key: bytes) -> str:
-    message_list = message.split('_')
-    iv = base64.b64decode(message_list[0])
-    ciphertext = base64.b64decode(message_list[1])
+    iv = base64.b64decode(message[:24])
+    ciphertext = base64.b64decode(message[24:])
     cipher = Cipher(algorithms.AES256(key), modes.CBC(iv))
     decryptor = cipher.decryptor()
     padded_data = decryptor.update(ciphertext) + decryptor.finalize()
@@ -81,7 +83,7 @@ def decrypt_message(message: str, key: bytes) -> str:
 
 def generate_chat_name():
     while True:
-        name = uuid.uuid4().hex
+        name = os.urandom(10).hex()
         path = os.path.join('backup', f'{name}.json')
         if not os.path.exists(path):
             return name
@@ -152,14 +154,14 @@ def create_chat():
         parallelism = int(request.form['parallelism'])
         password = request.form['password']
         g, p = generate_dh_parameters(key_size)
-        private_key = get_private_key(password, p)
+        salt_b64 = generate_salt_b64()
+        private_key = get_private_key(salt_b64, p, password)
         public_key = get_public_key(g, private_key, p)
-        salt = generate_salt_b64()
         data = {
             'g': g,
             'p': p,
             'public_key': public_key,
-            'salt': salt,
+            'salt': salt_b64,
             'iterations': iterations,
             'memory': memory,
             'parallelism': parallelism,
@@ -175,7 +177,7 @@ def accept_chat():
         conf = request.form['conf']
         password = request.form['password']
         data = configuration_to_dict(conf)
-        private_key = get_private_key(password, data['p'])
+        private_key = get_private_key(data['salt'], data['p'], password)
         public_key = get_public_key(data['g'], private_key, data['p'])
         data['public_key'] = public_key
         output = configuration_to_str(data)
@@ -200,7 +202,7 @@ def chat(name):
     data = get_chat(name)
     if request.method == 'POST':
         password = request.form['password']
-        private_key = get_private_key(password, data['p'])
+        private_key = get_private_key(data['salt'], data['p'], password)
         shared_key = get_shared_key(data['public_key'], private_key, data['p'])
         key = get_encryption_key(
             data['salt'],
@@ -225,7 +227,7 @@ def add_message(name):
         password = request.form['password']
         operation = request.form['operation']
         data = get_chat(name)
-        private_key = get_private_key(password, data['p'])
+        private_key = get_private_key(data['salt'], data['p'], password)
         shared_key = get_shared_key(data['public_key'], private_key, data['p'])
         key = get_encryption_key(
             data['salt'],
