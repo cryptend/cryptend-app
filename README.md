@@ -24,10 +24,10 @@ End-to-end encryption messaging tool for desktop.
 
 ## Dependencies
 
-- [cryptography](https://github.com/pyca/cryptography) `45.0.5`
+- [cryptography](https://github.com/pyca/cryptography) `45.0.6`
 - [Flask](https://github.com/pallets/flask) `3.1.1`
 
 ### Development
 
 - [tailwindcss](https://github.com/tailwindlabs/tailwindcss) `4.1.11`
-- [daisyui](https://github.com/saadeghi/daisyui) `5.0.48`
+- [daisyui](https://github.com/saadeghi/daisyui) `5.0.50`

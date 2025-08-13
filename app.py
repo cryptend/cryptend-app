@@ -117,16 +117,16 @@ def get_chat(name: str) -> dict:
     if not os.path.exists('backup'):
         os.makedirs('backup')
     path = os.path.join('backup', f'{name}.json')
-    with open(path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    with open(path, 'r', encoding='utf-8') as file:
+        return json.load(file)
 
 
 def save_chat(name: str, data: dict) -> None:
     if not os.path.exists('backup'):
         os.makedirs('backup')
     path = os.path.join('backup', f'{name}.json')
-    with open(path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=2)
+    with open(path, 'w', encoding='utf-8') as file:
+        json.dump(data, file, indent=2)
 
 
 app = Flask(__name__)
@@ -145,7 +145,7 @@ def home():
     return render_template('home.html', chats=chats)
 
 
-@app.route('/1', methods=['GET', 'POST'])
+@app.route('/create-chat', methods=['GET', 'POST'])
 def create_chat():
     if request.method == 'POST':
         key_size = int(request.form['key_size'])
@@ -171,7 +171,7 @@ def create_chat():
     return render_template('create_chat.html')
 
 
-@app.route('/2', methods=['GET', 'POST'])
+@app.route('/accept-chat', methods=['GET', 'POST'])
 def accept_chat():
     if request.method == 'POST':
         conf = request.form['conf']
@@ -185,7 +185,7 @@ def accept_chat():
     return render_template('accept_chat.html')
 
 
-@app.route('/3', methods=['GET', 'POST'])
+@app.route('/add-chat', methods=['GET', 'POST'])
 def add_chat():
     if request.method == 'POST':
         conf = request.form['conf']
@@ -197,7 +197,7 @@ def add_chat():
     return render_template('add_chat.html')
 
 
-@app.route('/<name>', methods=['GET', 'POST'])
+@app.route('/chat/<name>', methods=['GET', 'POST'])
 def chat(name):
     data = get_chat(name)
     if request.method == 'POST':
@@ -220,7 +220,7 @@ def chat(name):
     return render_template('chat.html', name=name, messages=messages, encrypted=True)
 
 
-@app.route('/<name>/1', methods=['GET', 'POST'])
+@app.route('/chat/<name>/add-message', methods=['GET', 'POST'])
 def add_message(name):
     if request.method == 'POST':
         message = request.form['message']

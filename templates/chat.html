@@ -2,11 +2,13 @@
 {% block main %}
 <div class="max-w-xl mx-auto">
   <div class="text-center text-sm text-base-content/70 break-all pb-2">
-    <a href="/{{ name }}" class="link link-hover">{{ name }}</a>
+    <a href="/chat/{{ name }}" class="link link-hover">{{ name }}</a>
   </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pb-3">
     <button class="btn" onclick="modal.showModal()">Decrypt chat</button>
-    <a href="/{{ name }}/1" class="btn" target="_blank">Add message <span class="text-base-content/30">🡥</span></a>
+    <a href="/chat/{{ name }}/add-message" class="btn" target="_blank">
+      Add message <span class="text-base-content/30">🡥</span>
+    </a>
   </div>
   {% for type, message in messages %}
   {% if type == 1 %}
