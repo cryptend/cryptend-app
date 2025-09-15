@@ -1,10 +1,11 @@
 {
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.11",
-    "daisyui": "^5.0.50",
-    "tailwindcss": "^4.1.11"
+    "@tailwindcss/cli": "^4.1.13",
+    "daisyui": "^5.1.12",
+    "tailwindcss": "^4.1.13"
   },
   "scripts": {
+    "install": "npm install tailwindcss@latest @tailwindcss/cli@latest daisyui@latest",
     "build:css": "npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.min.css --watch --minify"
   }
 }

@@ -9,6 +9,14 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
 from flask import Flask, request, render_template, redirect
 
+DEFAULT_ARGON2 = {
+    'password': b'Cryptend-Password',
+    'salt': b'Cryptend-Salt',
+    'iterations': 1,
+    'lanes': 4,
+    'memory_cost': 64 * 1024,
+}
+
 
 def generate_dh_parameters(key_size: int) -> tuple[int, int]:
     g = random.choice([2, 5])
@@ -24,9 +32,9 @@ def get_private_key(salt_b64: str, p: int, password: str) -> int:
     kdf = Argon2id(
         salt=base64.b64decode(salt_b64),
         length=math.floor(p.bit_length() / 8),
-        iterations=1,
-        lanes=4,
-        memory_cost=64 * 1024,
+        iterations=DEFAULT_ARGON2['iterations'],
+        lanes=DEFAULT_ARGON2['lanes'],
+        memory_cost=DEFAULT_ARGON2['memory_cost'],
     )
     return int.from_bytes(kdf.derive(password.encode()))
 
@@ -89,11 +97,26 @@ def generate_chat_name():
             return name
 
 
-def configuration_to_str(conf: dict) -> str:
-    return '_'.join([str(i) for i in conf.values()])
+def get_default_key() -> bytes:
+    kdf = Argon2id(
+        salt=DEFAULT_ARGON2['salt'],
+        length=32,
+        iterations=DEFAULT_ARGON2['iterations'],
+        lanes=DEFAULT_ARGON2['lanes'],
+        memory_cost=DEFAULT_ARGON2['memory_cost'],
+    )
+    return kdf.derive(DEFAULT_ARGON2['password'])
 
 
-def configuration_to_dict(conf: str) -> dict:
+def encrypt_configuration(data: dict) -> str:
+    conf = '_'.join([str(i) for i in data.values()])
+    key = get_default_key()
+    return encrypt_message(conf, key)
+
+
+def decrypt_configuration(encrypted_conf: str) -> dict:
+    key = get_default_key()
+    conf = decrypt_message(encrypted_conf, key)
     keys = (
         'g',
         'p',
@@ -132,8 +155,16 @@ def save_chat(name: str, data: dict) -> None:
 app = Flask(__name__)
 
 
-@app.get('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
+    if request.method == 'POST':
+        if 'conf' in request.form:
+            conf = request.form['conf']
+            data = decrypt_configuration(conf)
+            name = generate_chat_name()
+            data['messages'] = []
+            save_chat(name, data)
+            return redirect('/')
     if not os.path.exists('backup'):
         os.makedirs('backup')
     chats = []
@@ -145,7 +176,7 @@ def home():
     return render_template('home.html', chats=chats)
 
 
-@app.route('/create-chat', methods=['GET', 'POST'])
+@app.route('/1', methods=['GET', 'POST'])
 def create_chat():
     if request.method == 'POST':
         key_size = int(request.form['key_size'])
@@ -166,40 +197,42 @@ def create_chat():
             'memory': memory,
             'parallelism': parallelism,
         }
-        conf = configuration_to_str(data)
-        return render_template('create_chat.html', label='Configuration', output=conf)
-    return render_template('create_chat.html')
+        conf = encrypt_configuration(data)
+        context = {
+            'key_size': key_size,
+            'iterations': iterations,
+            'memory': memory,
+            'parallelism': parallelism,
+            'conf': conf,
+        }
+        return render_template('create_chat.html', **context)
+    context = {
+        'key_size': 1500,
+        'iterations': 30,
+        'memory': 128,
+        'parallelism': 4,
+    }
+    return render_template('create_chat.html', **context)
 
 
-@app.route('/accept-chat', methods=['GET', 'POST'])
+@app.route('/2', methods=['GET', 'POST'])
 def accept_chat():
     if request.method == 'POST':
-        conf = request.form['conf']
+        inter_conf = request.form['conf']
         password = request.form['password']
-        data = configuration_to_dict(conf)
+        data = decrypt_configuration(inter_conf)
         private_key = get_private_key(data['salt'], data['p'], password)
         public_key = get_public_key(data['g'], private_key, data['p'])
         data['public_key'] = public_key
-        output = configuration_to_str(data)
-        return render_template('accept_chat.html', label='Configuration', output=output)
+        conf = encrypt_configuration(data)
+        return render_template('accept_chat.html', inter_conf=inter_conf, conf=conf)
     return render_template('accept_chat.html')
 
 
-@app.route('/add-chat', methods=['GET', 'POST'])
-def add_chat():
-    if request.method == 'POST':
-        conf = request.form['conf']
-        data = configuration_to_dict(conf)
-        name = generate_chat_name()
-        data['messages'] = []
-        save_chat(name, data)
-        return redirect('/')
-    return render_template('add_chat.html')
-
-
-@app.route('/chat/<name>', methods=['GET', 'POST'])
+@app.route('/3/<name>', methods=['GET', 'POST'])
 def chat(name):
     data = get_chat(name)
+    context = {'name': name}
     if request.method == 'POST':
         password = request.form['password']
         private_key = get_private_key(data['salt'], data['p'], password)
@@ -211,41 +244,34 @@ def chat(name):
             data['parallelism'],
             shared_key,
         )
-        messages = []
-        for i in data['messages']:
-            output = decrypt_message(i[1], key)
-            messages.append([i[0], output])
-        return render_template('chat.html', name=name, messages=messages)
-    messages = data['messages']
-    return render_template('chat.html', name=name, messages=messages, encrypted=True)
-
-
-@app.route('/chat/<name>/add-message', methods=['GET', 'POST'])
-def add_message(name):
-    if request.method == 'POST':
-        message = request.form['message']
-        password = request.form['password']
-        operation = request.form['operation']
-        data = get_chat(name)
-        private_key = get_private_key(data['salt'], data['p'], password)
-        shared_key = get_shared_key(data['public_key'], private_key, data['p'])
-        key = get_encryption_key(
-            data['salt'],
-            data['iterations'],
-            data['memory'],
-            data['parallelism'],
-            shared_key,
-        )
-        label = ''
-        output = ''
-        if operation == 'encrypt':
+        if 'message' in request.form:
+            message = request.form['message']
             output = encrypt_message(message, key)
             data['messages'].append([1, output])
-            label = 'Encrypted message'
-        elif operation == 'decrypt':
-            output = decrypt_message(message, key)
-            data['messages'].append([2, message])
-            label = 'Decrypted message'
-        save_chat(name, data)
-        return render_template('add_message.html', name=name, label=label, output=output)
-    return render_template('add_message.html', name=name)
+            context['message'] = message
+            context['encrypted_output'] = output
+            save_chat(name, data)
+        elif 'encrypted_message' in request.form:
+            encrypted_message = request.form['encrypted_message']
+            try:
+                output = decrypt_message(encrypted_message, key)
+                data['messages'].append([2, encrypted_message])
+            except ValueError:
+                output = ''
+            context['encrypted_message'] = encrypted_message
+            context['decrypted_output'] = output
+            save_chat(name, data)
+        messages = []
+        for i in data['messages']:
+            try:
+                output = decrypt_message(i[1], key)
+                messages.append((i[0], output, 'd'))
+            except ValueError:
+                messages.append((i[0], i[1], 'e'))
+        context['messages'] = messages
+        return render_template('chat.html', **context)
+    messages = []
+    for i in data['messages']:
+        messages.append((i[0], i[1], 'e'))
+    context['messages'] = messages
+    return render_template('chat.html', **context)

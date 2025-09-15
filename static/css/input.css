@@ -3,3 +3,16 @@
 @plugin "daisyui" {
   themes: dracula --default;
 }
+
+.input, .textarea {
+  @apply w-full;
+}
+.fieldset {
+  @apply !text-[13px] py-0;
+}
+.fieldset-legend {
+  @apply text-base pt-0 pb-4;
+}
+.textarea:is(:disabled, [disabled]) {
+  @apply text-base-content/80;
+}

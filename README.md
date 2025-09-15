@@ -13,7 +13,7 @@ End-to-end encryption messaging tool for desktop.
 
 1. Open the `Create chat` page, adjust the parameters, set a password, create a configuration and send it to your interlocutor.
 2. Your interlocutor should open the `Accept chat` page, paste your configuration, set a password, create a configuration and send it to you.
-3. Open the `Add chat` page, paste interlocutor's configuration and add chat.
+3. Add chat.
 
 ## Algorithm
 
@@ -24,10 +24,10 @@ End-to-end encryption messaging tool for desktop.
 
 ## Dependencies
 
-- [cryptography](https://github.com/pyca/cryptography) `45.0.6`
-- [Flask](https://github.com/pallets/flask) `3.1.1`
+- [cryptography](https://github.com/pyca/cryptography) `45.0.7`
+- [Flask](https://github.com/pallets/flask) `3.1.2`
 
 ### Development
 
-- [tailwindcss](https://github.com/tailwindlabs/tailwindcss) `4.1.11`
-- [daisyui](https://github.com/saadeghi/daisyui) `5.0.50`
+- [tailwindcss](https://github.com/tailwindlabs/tailwindcss) `4.1.13`
+- [daisyui](https://github.com/saadeghi/daisyui) `5.1.12`

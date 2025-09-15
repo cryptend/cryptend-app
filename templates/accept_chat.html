@@ -2,12 +2,15 @@
 {% block main %}
 <form method="post">
   <fieldset class="fieldset max-w-sm mx-auto">
+    <legend class="fieldset-legend">Accept chat</legend>
     <label class="label">Interlocutor's configuration</label>
-    <textarea name="conf" class="textarea w-full" placeholder="Interlocutor's configuration" required></textarea>
+    <textarea name="conf" class="textarea break-all" spellcheck="false" required>{{ inter_conf }}</textarea>
     <label class="label">Password</label>
-    <input type="password" name="password" class="input w-full" placeholder="Password" required>
-    <button type="submit" class="btn btn-secondary mt-4">Accept chat</button>
+    <input type="password" name="password" class="input" required>
+    <button type="submit" class="btn btn-secondary mt-3 mb-1">Create configuration</button>
+    <label class="label">My configuration</label>
+    <textarea id="output" class="textarea break-all" disabled>{{ conf }}</textarea>
+    <button type="button" id="copy" class="btn mt-3">Copy to clipboard</button>
   </fieldset>
 </form>
-{% include 'output.html' %}
 {% endblock %}
