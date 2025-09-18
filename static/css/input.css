@@ -1,8 +1,6 @@
 @import "tailwindcss" source(none);
 @source "../../templates";
-@plugin "daisyui" {
-  themes: dracula --default;
-}
+@plugin "daisyui";
 
 .input, .textarea {
   @apply w-full;

@@ -12,7 +12,7 @@
   {% for sender, message, type in messages %}
   {% if sender == 1 %}
   <div class="chat chat-end{% if type == 'e' %} break-all{% endif %}">
-    <div class="chat-bubble chat-bubble-neutral">{{ message }}</div>
+    <div class="chat-bubble bg-primary/25">{{ message }}</div>
   </div>
   {% elif sender == 2 %}
   <div class="chat chat-start{% if type == 'e' %} break-all{% endif %}">
@@ -28,9 +28,9 @@
         <legend class="fieldset-legend">Decrypt chat</legend>
         <label class="label">Password</label>
         <input type="password" name="password" class="input" required>
-        <button type="submit" class="btn btn-secondary mt-3">
+        <button type="submit" class="btn btn-primary mt-3">
           <span>Decrypt chat</span>
-          <span class="loading loading-spinner text-secondary hidden"></span>
+          <span class="loading loading-spinner hidden"></span>
         </button>
       </fieldset>
     </form>
@@ -46,9 +46,9 @@
         <textarea name="message" class="textarea" spellcheck="false" required>{{ message }}</textarea>
         <label class="label">Password</label>
         <input type="password" name="password" class="input" required>
-        <button type="submit" class="btn btn-secondary mt-3 mb-1">
+        <button type="submit" class="btn btn-primary mt-3 mb-1">
           <span>Encrypt message</span>
-          <span class="loading loading-spinner text-secondary hidden"></span>
+          <span class="loading loading-spinner hidden"></span>
         </button>
         <label class="label">Encrypted message</label>
         <textarea id="output-1" class="textarea break-all" disabled>{{ encrypted_output }}</textarea>
@@ -67,9 +67,9 @@
         <textarea name="encrypted_message" class="textarea" spellcheck="false" required>{{ encrypted_message }}</textarea>
         <label class="label">Password</label>
         <input type="password" name="password" class="input" required>
-        <button type="submit" class="btn btn-secondary mt-3 mb-1">
+        <button type="submit" class="btn btn-primary mt-3 mb-1">
           <span>Decrypt message</span>
-          <span class="loading loading-spinner text-secondary hidden"></span>
+          <span class="loading loading-spinner hidden"></span>
         </button>
         <label class="label">Decrypted message</label>
         <textarea id="output-2" class="textarea break-all" disabled>{{ decrypted_output }}</textarea>

@@ -159,7 +159,7 @@ app = Flask(__name__)
 def home():
     if request.method == 'POST':
         if 'conf' in request.form:
-            conf = request.form['conf']
+            conf = request.form['conf'].strip()
             data = decrypt_configuration(conf)
             name = generate_chat_name()
             data['messages'] = []
@@ -218,7 +218,7 @@ def create_chat():
 @app.route('/2', methods=['GET', 'POST'])
 def accept_chat():
     if request.method == 'POST':
-        inter_conf = request.form['conf']
+        inter_conf = request.form['conf'].strip()
         password = request.form['password']
         data = decrypt_configuration(inter_conf)
         private_key = get_private_key(data['salt'], data['p'], password)
@@ -245,14 +245,14 @@ def chat(name):
             shared_key,
         )
         if 'message' in request.form:
-            message = request.form['message']
+            message = request.form['message'].strip()
             output = encrypt_message(message, key)
             data['messages'].append([1, output])
             context['message'] = message
             context['encrypted_output'] = output
             save_chat(name, data)
         elif 'encrypted_message' in request.form:
-            encrypted_message = request.form['encrypted_message']
+            encrypted_message = request.form['encrypted_message'].strip()
             try:
                 output = decrypt_message(encrypted_message, key)
                 data['messages'].append([2, encrypted_message])
