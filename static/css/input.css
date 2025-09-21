@@ -6,11 +6,17 @@
   @apply w-full;
 }
 .fieldset {
-  @apply !text-[13px] py-0;
+  @apply max-w-sm mx-auto !text-[0.8rem] py-0;
 }
 .fieldset-legend {
   @apply text-base pt-0 pb-4;
 }
 .textarea:is(:disabled, [disabled]) {
   @apply text-base-content/80;
+}
+.loading-spinner {
+  @apply text-base-content/40;
+}
+.modal-box {
+  @apply p-5 max-w-[26.5rem];
 }

@@ -70,7 +70,7 @@ def encrypt_message(plaintext: str, key: bytes) -> str:
     iv = os.urandom(16)
     cipher = Cipher(algorithms.AES256(key), modes.CBC(iv))
     encryptor = cipher.encryptor()
-    padder = padding.PKCS7(algorithms.AES256.block_size).padder()
+    padder = padding.PKCS7(128).padder()
     padded_data = padder.update(plaintext.encode()) + padder.finalize()
     ciphertext = encryptor.update(padded_data) + encryptor.finalize()
     iv_b64 = base64.b64encode(iv).decode()
@@ -84,7 +84,7 @@ def decrypt_message(message: str, key: bytes) -> str:
     cipher = Cipher(algorithms.AES256(key), modes.CBC(iv))
     decryptor = cipher.decryptor()
     padded_data = decryptor.update(ciphertext) + decryptor.finalize()
-    unpadder = padding.PKCS7(algorithms.AES256.block_size).unpadder()
+    unpadder = padding.PKCS7(128).unpadder()
     plaintext = unpadder.update(padded_data) + unpadder.finalize()
     return plaintext.decode()
 
