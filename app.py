@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
 from flask import Flask, request, render_template, redirect
 
-DEFAULT_ARGON2 = {
+default_argon2 = {
     'password': b'Cryptend-Password',
     'salt': b'Cryptend-Salt',
     'iterations': 1,
@@ -32,9 +32,9 @@ def get_private_key(salt_b64: str, p: int, password: str) -> int:
     kdf = Argon2id(
         salt=base64.b64decode(salt_b64),
         length=math.floor(p.bit_length() / 8),
-        iterations=DEFAULT_ARGON2['iterations'],
-        lanes=DEFAULT_ARGON2['lanes'],
-        memory_cost=DEFAULT_ARGON2['memory_cost'],
+        iterations=default_argon2['iterations'],
+        lanes=default_argon2['lanes'],
+        memory_cost=default_argon2['memory_cost'],
     )
     return int.from_bytes(kdf.derive(password.encode()))
 
@@ -70,7 +70,7 @@ def encrypt_message(plaintext: str, key: bytes) -> str:
     iv = os.urandom(16)
     cipher = Cipher(algorithms.AES256(key), modes.CBC(iv))
     encryptor = cipher.encryptor()
-    padder = padding.PKCS7(128).padder()
+    padder = padding.PKCS7(algorithms.AES256.block_size).padder()
     padded_data = padder.update(plaintext.encode()) + padder.finalize()
     ciphertext = encryptor.update(padded_data) + encryptor.finalize()
     iv_b64 = base64.b64encode(iv).decode()
@@ -84,12 +84,12 @@ def decrypt_message(message: str, key: bytes) -> str:
     cipher = Cipher(algorithms.AES256(key), modes.CBC(iv))
     decryptor = cipher.decryptor()
     padded_data = decryptor.update(ciphertext) + decryptor.finalize()
-    unpadder = padding.PKCS7(128).unpadder()
+    unpadder = padding.PKCS7(algorithms.AES256.block_size).unpadder()
     plaintext = unpadder.update(padded_data) + unpadder.finalize()
     return plaintext.decode()
 
 
-def generate_chat_name():
+def generate_chat_name() -> str:
     while True:
         name = os.urandom(10).hex()
         path = os.path.join('backup', f'{name}.json')
@@ -99,13 +99,13 @@ def generate_chat_name():
 
 def get_default_key() -> bytes:
     kdf = Argon2id(
-        salt=DEFAULT_ARGON2['salt'],
+        salt=default_argon2['salt'],
         length=32,
-        iterations=DEFAULT_ARGON2['iterations'],
-        lanes=DEFAULT_ARGON2['lanes'],
-        memory_cost=DEFAULT_ARGON2['memory_cost'],
+        iterations=default_argon2['iterations'],
+        lanes=default_argon2['lanes'],
+        memory_cost=default_argon2['memory_cost'],
     )
-    return kdf.derive(DEFAULT_ARGON2['password'])
+    return kdf.derive(default_argon2['password'])
 
 
 def encrypt_configuration(data: dict) -> str:
@@ -158,13 +158,12 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
-        if 'conf' in request.form:
-            conf = request.form['conf'].strip()
-            data = decrypt_configuration(conf)
-            name = generate_chat_name()
-            data['messages'] = []
-            save_chat(name, data)
-            return redirect('/')
+        conf = request.form['conf'].strip()
+        data = decrypt_configuration(conf)
+        name = generate_chat_name()
+        data['messages'] = []
+        save_chat(name, data)
+        return redirect('/')
     if not os.path.exists('backup'):
         os.makedirs('backup')
     chats = []

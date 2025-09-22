@@ -6,7 +6,7 @@
   @apply w-full;
 }
 .fieldset {
-  @apply max-w-sm mx-auto !text-[0.8rem] py-0;
+  @apply max-w-sm mx-auto !text-[0.8125rem] py-0;
 }
 .fieldset-legend {
   @apply text-base pt-0 pb-4;

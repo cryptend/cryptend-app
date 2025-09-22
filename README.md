@@ -6,8 +6,8 @@ End-to-end encrypted messaging tool for desktop.
 
 1. Install [Python](https://www.python.org/downloads/).
 2. Download [Cryptend](https://github.com/cryptend/cryptend-app/archive/refs/heads/main.zip) and unzip it.
-3. Run `install.bat` (this will execute `pip install -r requirements.txt`).
-4. Run `Cryptend.bat` (this will execute `flask run`).
+3. Run `install.py` (this will execute `python -m pip install -r requirements.txt`).
+4. Run `run.py` (this will execute `flask run` and open `http://127.0.0.1:5000/`).
 
 ## Usage
 
