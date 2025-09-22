@@ -4,10 +4,46 @@ End-to-end encrypted messaging tool for desktop.
 
 ## Installing
 
-1. Install [Python](https://www.python.org/downloads/).
-2. Download [Cryptend](https://github.com/cryptend/cryptend-app/archive/refs/heads/main.zip) and unzip it.
-3. Run `install.py` (this will execute `python -m pip install -r requirements.txt`).
-4. Run `run.py` (this will execute `flask run` and open `http://127.0.0.1:5000/`).
+### Windows
+
+1. Install [Python](https://www.python.org/downloads/) (Check "Add python.exe to PATH")
+2. Download [Cryptend](https://github.com/cryptend/cryptend-app/archive/refs/heads/main.zip) and unzip it
+3. Run `install.bat`
+4. Run `Cryptend.bat`
+
+### Ubuntu
+
+```bash
+sudo apt update
+```
+
+```bash
+sudo apt install git python3-pip python3-venv
+```
+
+```bash
+git clone https://github.com/cryptend/cryptend-app.git
+```
+
+```bash
+cd cryptend-app
+```
+
+```bash
+python3 -m venv venv
+```
+
+```bash
+. venv/bin/activate
+```
+
+```bash
+pip install -r requirements.txt
+```
+
+```bash
+flask run
+```
 
 ## Usage
 
