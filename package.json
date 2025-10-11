@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.13",
-    "daisyui": "^5.1.14",
-    "tailwindcss": "^4.1.13"
+    "@tailwindcss/cli": "^4.1.14",
+    "daisyui": "^5.2.2",
+    "tailwindcss": "^4.1.14"
   },
   "scripts": {
     "install": "npm install tailwindcss@latest @tailwindcss/cli@latest daisyui@latest",

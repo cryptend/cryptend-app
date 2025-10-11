@@ -163,7 +163,7 @@ def home():
         name = generate_chat_name()
         data['messages'] = []
         save_chat(name, data)
-        return redirect('/')
+        return redirect(f'/3/{name}')
     if not os.path.exists('backup'):
         os.makedirs('backup')
     chats = []

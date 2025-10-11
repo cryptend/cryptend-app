@@ -2,6 +2,17 @@
 @source "../../templates";
 @plugin "daisyui";
 
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  src: url('/static/fonts/Inter-VariableFont.ttf');
+}
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+}
+
 .input, .textarea {
   @apply w-full;
 }
