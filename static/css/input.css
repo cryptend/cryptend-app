@@ -3,21 +3,27 @@
 @plugin "daisyui";
 
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Open Sans';
   font-style: normal;
-  font-weight: 100 900;
-  src: url('/static/fonts/Inter-VariableFont.ttf');
+  font-weight: 400;
+  src: url('/static/fonts/OpenSans-Regular.ttf');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/static/fonts/OpenSans-SemiBold.ttf');
 }
 
 @theme {
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'Open Sans', sans-serif;
 }
 
 .input, .textarea {
   @apply w-full;
 }
 .fieldset {
-  @apply max-w-sm mx-auto !text-[0.8125rem] py-0;
+  @apply max-w-sm mx-auto text-[0.8125rem]! py-0;
 }
 .fieldset-legend {
   @apply text-base pt-0 pb-4;
@@ -29,5 +35,5 @@
   @apply text-base-content/40;
 }
 .modal-box {
-  @apply p-5 max-w-[26.5rem];
+  @apply p-5 max-w-106;
 }
