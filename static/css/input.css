@@ -3,20 +3,20 @@
 @plugin "daisyui";
 
 @font-face {
-  font-family: 'Open Sans';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
-  src: url('/static/fonts/OpenSans-Regular.ttf');
+  src: url('/static/fonts/Inter-Regular.woff2') format('woff2');
 }
 @font-face {
-  font-family: 'Open Sans';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
-  src: url('/static/fonts/OpenSans-SemiBold.ttf');
+  src: url('/static/fonts/Inter-SemiBold.woff2') format('woff2');
 }
 
 @theme {
-  --font-sans: 'Open Sans', sans-serif;
+  --font-sans: 'Inter', sans-serif;
 }
 
 .input, .textarea {

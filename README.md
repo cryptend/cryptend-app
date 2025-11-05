@@ -15,33 +15,12 @@ End-to-end encrypted messaging tool for desktop.
 
 ```bash
 sudo apt update
-```
-
-```bash
 sudo apt install git python3-pip python3-venv
-```
-
-```bash
 git clone https://github.com/cryptend/cryptend-app.git
-```
-
-```bash
 cd cryptend-app
-```
-
-```bash
 python3 -m venv venv
-```
-
-```bash
 . venv/bin/activate
-```
-
-```bash
 pip install -r requirements.txt
-```
-
-```bash
 flask run
 ```
 

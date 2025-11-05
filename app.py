@@ -207,8 +207,8 @@ def create_chat():
         return render_template('create_chat.html', **context)
     context = {
         'key_size': 1500,
-        'iterations': 20,
-        'memory': 128,
+        'iterations': 60,
+        'memory': 64,
         'parallelism': 8,
     }
     return render_template('create_chat.html', **context)
