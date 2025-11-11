@@ -1,23 +1,23 @@
 {% extends 'base.html' %}
 {% block main %}
-<form method="post" id="create-chat-form">
-  <fieldset class="fieldset">
+<form method="post" id="create-chat-form" class="px-2 pb-10">
+  <fieldset class="fieldset max-w-md mx-auto border border-base-300 rounded-box p-5">
     <legend class="fieldset-legend">Create chat</legend>
-    <div class="label">Key size [Bit]</div>
+    <label class="label">Key size [Bit]</label>
     <input type="number" name="key_size" class="input" min="1024" max="2048" value="{{ key_size }}" required>
-    <div class="label">Iterations</div>
+    <label class="label">Iterations</label>
     <input type="number" name="iterations" class="input" min="10" value="{{ iterations }}" required>
-    <div class="label">Memory [MiB]</div>
+    <label class="label">Memory [MiB]</label>
     <input type="number" name="memory" class="input" min="64" value="{{ memory }}" required>
-    <div class="label">Parallelism</div>
+    <label class="label">Parallelism</label>
     <input type="number" name="parallelism" class="input" min="4" value="{{ parallelism }}" required>
-    <div class="label">Password</div>
+    <label class="label">Password</label>
     <input type="password" name="password" class="input" required>
-    <button type="submit" class="btn btn-primary my-2">
+    <button type="submit" class="btn btn-secondary my-2">
       <span>Create configuration</span>
       <span class="loading loading-spinner hidden"></span>
     </button>
-    <div class="label">My configuration</div>
+    <label class="label">My configuration</label>
     <textarea id="output" class="textarea break-all" disabled>{{ conf }}</textarea>
     <button type="button" id="copy" class="btn mt-2">Copy to clipboard</button>
   </fieldset>

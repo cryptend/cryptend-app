@@ -1,6 +1,8 @@
 @import "tailwindcss" source(none);
 @source "../../templates";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: dracula --default;
+}
 
 @font-face {
   font-family: 'Inter';
@@ -22,11 +24,14 @@
 .input, .textarea {
   @apply w-full;
 }
+.label {
+  @apply w-fit;
+}
 .fieldset {
-  @apply max-w-sm mx-auto text-[0.8125rem]! py-0;
+  @apply text-[0.8125rem]!;
 }
 .fieldset-legend {
-  @apply text-base pt-0 pb-4;
+  @apply text-base;
 }
 .textarea:is(:disabled, [disabled]) {
   @apply text-base-content/80;
@@ -34,6 +39,12 @@
 .loading-spinner {
   @apply text-base-content/40;
 }
-.modal-box {
-  @apply p-5 max-w-106;
+.stretched-link::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  content: "";
 }

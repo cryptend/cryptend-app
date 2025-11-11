@@ -1,35 +1,28 @@
 {% extends 'base.html' %}
 {% block main %}
-<div class="max-w-lg mx-auto">
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-    <a href="/1" class="btn">Create chat</a>
-    <a href="/2" class="btn">Accept chat</a>
-    <button class="btn" onclick="add_chat_modal.showModal()">Add chat</button>
+<div class="max-w-lg mx-auto px-2 pb-10">
+  <div class="flex justify-center py-2">
+    <button class="btn btn-wide" onclick="add_chat_modal.showModal()">Add chat</button>
   </div>
-  <div class="grid grid-cols-1 gap-2 pt-2">
-  {% for name, number in chats %}
-  <div class="card card-border shadow-sm">
-    <div class="card-body p-4">
-      <h2 class="card-title break-all">
-        <a href="/3/{{ name }}" class="link link-hover">{{ name }}</a>
-      </h2>
-      <p class="text-base-content/60">{{ number }} {% if number == 1 %}message{% else %}messages{% endif %}</p>
-      <div class="card-actions justify-end">
-        <a href="/3/{{ name }}" class="btn">Open chat</a>
+  <ul class="list bg-base-100 rounded-box shadow-md">
+    {% for name, number in chats %}
+    <li class="list-row p-5 hover:bg-base-200 transition-colors duration-200">
+      <div>
+        <a href="/3/{{ name }}" class="text-lg font-semibold stretched-link">{{ name }}</a>
+        <div class="text-sm text-base-content/60">{{ number }} {% if number == 1 %}message{% else %}messages{% endif %}</div>
       </div>
-    </div>
-  </div>
-  {% endfor %}
-  </div>
+    </li>
+    {% endfor %}
+  </ul>
 </div>
 <dialog id="add_chat_modal" class="modal">
-  <div class="modal-box">
+  <div class="modal-box max-w-md p-5">
+    <h3 class="font-semibold">Add chat</h3>
     <form method="post">
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend">Add chat</legend>
-        <div class="label">Interlocutor's configuration</div>
+      <fieldset class="fieldset pt-4 pb-0">
+        <label class="label">Interlocutor's configuration</label>
         <textarea name="conf" class="textarea break-all" spellcheck="false" required></textarea>
-        <button type="submit" class="btn btn-primary mt-2">Add chat</button>
+        <button type="submit" class="btn btn-secondary mt-2">Add chat</button>
       </fieldset>
     </form>
   </div>

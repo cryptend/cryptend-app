@@ -13,9 +13,8 @@ function addLoading(formId) {
 }
 
 addLoading('create-chat-form');
-addLoading('decrypt-chat-form');
-addLoading('encrypt-message-form');
-addLoading('decrypt-message-form');
+addLoading('encrypt-form');
+addLoading('decrypt-form');
 
 function copyText(btnId, inputId) {
   let btn = document.getElementById(btnId);
@@ -39,3 +38,7 @@ function copyText(btnId, inputId) {
 copyText('copy', 'output');
 copyText('copy-1', 'output-1');
 copyText('copy-2', 'output-2');
+
+if (window.location.pathname.slice(0, 2) === '/3') {
+  window.scrollTo(0, document.body.scrollHeight);
+}

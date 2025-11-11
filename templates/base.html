@@ -7,12 +7,20 @@
   <link rel="stylesheet" href="/static/css/output.min.css">
 </head>
 <body>
-  <div class="px-3 pb-10">
-    <div class="text-center pt-1 pb-2">
-      <a href="/" class="btn btn-ghost text-base">Cryptend</a>
-    </div>
-    {% block main %}{% endblock %}
+  <div class="flex justify-between items-center py-1 px-2 max-w-5xl mx-auto">
+    <a href="/" class="link link-hover font-semibold">Cryptend</a>
+    <a href="https://github.com/cryptend/cryptend-app" class="p-0.5 hover:brightness-75" target="_blank">
+      <img src="/static/img/github.svg" alt="GitHub">
+    </a>
   </div>
+  {% if not name %}
+  <div role="tablist" class="tabs tabs-border justify-center pb-2">
+    <a href="/" role="tab" class="tab{% if request.path == '/' %} tab-active{% endif %}">Chats</a>
+    <a href="/1" role="tab" class="tab{% if request.path == '/1' %} tab-active{% endif %}">Create</a>
+    <a href="/2" role="tab" class="tab{% if request.path == '/2' %} tab-active{% endif %}">Accept</a>
+  </div>
+  {% endif %}
+  {% block main %}{% endblock %}
   <script src="/static/js/main.js"></script>
 </body>
 </html>

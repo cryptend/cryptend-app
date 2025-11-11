@@ -249,6 +249,8 @@ def chat(name):
             data['messages'].append([1, output])
             context['message'] = message
             context['encrypted_output'] = output
+            if request.form.get('return_password_1'):
+                context['password'] = password
             save_chat(name, data)
         elif 'encrypted_message' in request.form:
             encrypted_message = request.form['encrypted_message'].strip()
@@ -259,6 +261,8 @@ def chat(name):
                 output = ''
             context['encrypted_message'] = encrypted_message
             context['decrypted_output'] = output
+            if request.form.get('return_password_2'):
+                context['password'] = password
             save_chat(name, data)
         messages = []
         for i in data['messages']:

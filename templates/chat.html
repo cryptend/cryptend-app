@@ -1,18 +1,24 @@
 {% extends 'base.html' %}
 {% block main %}
-<div class="max-w-xl mx-auto">
-  <div class="text-center text-sm pb-2">
-    <a href="/3/{{ name }}" class="link link-hover">{{ name }}</a>
+<div class="py-1 px-2 sticky top-0 z-20 bg-base-100/80 backdrop-blur-md">
+  <div class="max-w-2xl mx-auto flex justify-between items-center gap-1">
+    <div class="flex items-center gap-1 truncate">
+      <a href="/" class="btn btn-ghost btn-circle btn-sm">
+        <img src="/static/img/arrow_back.svg" alt="Back">
+      </a>
+      <a href="/3/{{ name }}" class="link link-hover text-sm truncate">{{ name }}</a>
+    </div>
+    <div class="flex gap-1">
+      <button class="btn sm:px-7" onclick="encrypt_modal.showModal()">Encrypt</button>
+      <button class="btn sm:px-7" onclick="decrypt_modal.showModal()">Decrypt</button>
+    </div>
   </div>
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pb-2">
-    <button class="btn" onclick="decrypt_chat_modal.showModal()">Decrypt chat</button>
-    <button class="btn" onclick="encrypt_message_modal.showModal()">Encrypt message</button>
-    <button class="btn" onclick="decrypt_message_modal.showModal()">Decrypt message</button>
-  </div>
+</div>
+<div class="max-w-2xl mx-auto pt-2 px-2 pb-10">
   {% for sender, message, type in messages %}
   {% if sender == 1 %}
   <div class="chat chat-end{% if type == 'e' %} break-all{% endif %}">
-    <div class="chat-bubble bg-primary/25">{{ message }}</div>
+    <div class="chat-bubble bg-secondary/25">{{ message }}</div>
   </div>
   {% elif sender == 2 %}
   <div class="chat chat-start{% if type == 'e' %} break-all{% endif %}">
@@ -21,36 +27,24 @@
   {% endif %}
   {% endfor %}
 </div>
-<dialog id="decrypt_chat_modal" class="modal">
-  <div class="modal-box">
-    <form method="post" id="decrypt-chat-form">
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend">Decrypt chat</legend>
-        <div class="label">Password</div>
-        <input type="password" name="password" class="input" required>
-        <button type="submit" class="btn btn-primary mt-2">
-          <span>Decrypt chat</span>
-          <span class="loading loading-spinner hidden"></span>
-        </button>
-      </fieldset>
-    </form>
-  </div>
-  <form method="dialog" class="modal-backdrop"><button></button></form>
-</dialog>
-<dialog id="encrypt_message_modal" class="modal"{% if encrypted_output %} open{% endif %}>
-  <div class="modal-box">
-    <form method="post" id="encrypt-message-form">
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend">Encrypt message</legend>
-        <div class="label">Message</div>
+<dialog id="encrypt_modal" class="modal"{% if encrypted_output %} open{% endif %}>
+  <div class="modal-box max-w-md p-5">
+    <h3 class="font-semibold">Encrypt</h3>
+    <form method="post" id="encrypt-form">
+      <fieldset class="fieldset pt-4 pb-0">
+        <label class="label">Message</label>
         <textarea name="message" class="textarea" spellcheck="false" required>{{ message }}</textarea>
-        <div class="label">Password</div>
-        <input type="password" name="password" class="input" required>
-        <button type="submit" class="btn btn-primary my-2">
-          <span>Encrypt message</span>
+        <label class="label">Password</label>
+        <input type="password" name="password" class="input" value="{{ password }}" required>
+        <label class="label">
+          <input type="checkbox" name="return_password_1" class="checkbox checkbox-sm">
+          Return password
+        </label>
+        <button type="submit" class="btn btn-secondary my-2">
+          <span>Encrypt</span>
           <span class="loading loading-spinner hidden"></span>
         </button>
-        <div class="label">Encrypted message</div>
+        <label class="label">Encrypted message</label>
         <textarea id="output-1" class="textarea break-all" disabled>{{ encrypted_output }}</textarea>
         <button type="button" id="copy-1" class="btn mt-2">Copy to clipboard</button>
       </fieldset>
@@ -58,20 +52,24 @@
   </div>
   <form method="dialog" class="modal-backdrop"><button></button></form>
 </dialog>
-<dialog id="decrypt_message_modal" class="modal"{% if decrypted_output %} open{% endif %}>
-  <div class="modal-box">
-    <form method="post" id="decrypt-message-form">
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend">Decrypt message</legend>
-        <div class="label">Encrypted message</div>
-        <textarea name="encrypted_message" class="textarea" spellcheck="false" required>{{ encrypted_message }}</textarea>
-        <div class="label">Password</div>
-        <input type="password" name="password" class="input" required>
-        <button type="submit" class="btn btn-primary my-2">
-          <span>Decrypt message</span>
+<dialog id="decrypt_modal" class="modal"{% if decrypted_output %} open{% endif %}>
+  <div class="modal-box max-w-md p-5">
+    <h3 class="font-semibold">Decrypt</h3>
+    <form method="post" id="decrypt-form">
+      <fieldset class="fieldset pt-4 pb-0">
+        <label class="label">Message (optional)</label>
+        <textarea name="encrypted_message" class="textarea" spellcheck="false">{{ encrypted_message }}</textarea>
+        <label class="label">Password</label>
+        <input type="password" name="password" class="input" value="{{ password }}" required>
+        <label class="label">
+          <input type="checkbox" name="return_password_2" class="checkbox checkbox-sm">
+          Return password
+        </label>        
+        <button type="submit" class="btn btn-secondary my-2">
+          <span>Decrypt</span>
           <span class="loading loading-spinner hidden"></span>
         </button>
-        <div class="label">Decrypted message</div>
+        <label class="label">Decrypted message</label>
         <textarea id="output-2" class="textarea break-all" disabled>{{ decrypted_output }}</textarea>
         <button type="button" id="copy-2" class="btn mt-2">Copy to clipboard</button>
       </fieldset>
