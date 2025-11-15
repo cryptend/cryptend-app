@@ -55,7 +55,7 @@
 }
 
 .input, .textarea {
-  @apply w-full hover:border-base-content/40 focus:border-base-content;
+  @apply w-full;
 }
 .label {
   @apply w-fit;
@@ -81,4 +81,7 @@
 }
 .card:focus-visible {
   @apply outline-solid outline-base-content outline-2 outline-offset-2;
+}
+.checkbox {
+  @apply checkbox-sm;
 }

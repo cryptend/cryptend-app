@@ -91,7 +91,7 @@ def decrypt_message(message: str, key: bytes) -> str:
 
 def generate_chat_name() -> str:
     while True:
-        name = os.urandom(9).hex()
+        name = os.urandom(8).hex()
         path = os.path.join('backup', f'{name}.json')
         if not os.path.exists(path):
             return name
@@ -172,6 +172,7 @@ def home():
             name = os.path.splitext(file)[0]
             data = get_chat(name)
             chats.append((name, len(data['messages'])))
+    chats = sorted(chats, key=lambda x: x[1], reverse=True)
     return render_template('home.html', chats=chats)
 
 

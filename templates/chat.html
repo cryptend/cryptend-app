@@ -7,20 +7,11 @@
         <a href="/" class="btn btn-ghost btn-circle max-sm:btn-sm">
           <img src="/static/img/arrow_back.svg" alt="Back">
         </a>
-        <a href="/3/{{ name }}" class="link link-hover text-[0.75rem] sm:text-sm max-sm:truncate">{{ name }}</a>
+        <a href="/3/{{ name }}" class="link link-hover text-[0.8125rem] sm:text-sm max-sm:truncate">{{ name }}</a>
       </div>
-      <div class="flex items-center gap-0.5 sm:gap-1">
-        <button class="btn max-sm:btn-sm" onclick="encrypt_modal.showModal()">Encrypt</button>
-        <button class="btn max-sm:btn-sm" onclick="decrypt_modal.showModal()">Decrypt</button>
-        <div class="dropdown dropdown-end">
-          <div tabindex="0" role="button" class="btn btn-ghost btn-circle max-sm:btn-sm">
-            <img src="/static/img/dots_vertical.svg" alt="More">
-          </div>
-          <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-            <li><a>Parameters</a></li>
-            <li><a>Delete chat</a></li>
-          </ul>
-        </div>
+      <div class="flex items-center gap-1">
+        <button class="btn max-sm:px-2.5" onclick="encrypt_modal.showModal()">Encrypt</button>
+        <button class="btn max-sm:px-2.5" onclick="decrypt_modal.showModal()">Decrypt</button>
       </div>
     </div>
   </div>
@@ -37,21 +28,18 @@
     <h3 class="font-semibold">Encrypt</h3>
     <form method="post" id="encrypt-form">
       <fieldset class="fieldset pt-4 pb-0">
-        <label for="message" class="label">Message</label>
-        <textarea id="message" name="message" class="textarea" spellcheck="false" required></textarea>
-        <label for="password-1" class="label">Password</label>
-        <input type="password" id="password-1" name="password" class="input" value="{{ password }}" required>
+        <textarea name="message" class="textarea" placeholder="Message" spellcheck="false" required></textarea>
+        <input type="password" name="password" class="input mt-2" value="{{ password }}" placeholder="Password" required>
         <label class="label">
-          <input type="checkbox" name="return_password_1" class="checkbox checkbox-sm"{% if password %} checked{% endif %}>
+          <input type="checkbox" name="return_password_1" class="checkbox"{% if password %} checked{% endif %}>
           Return password
         </label>
         <button type="submit" class="btn btn-primary my-2">
           <span>Encrypt</span>
           <span class="loading loading-spinner hidden"></span>
         </button>
-        <label for="output-1" class="label">Encrypted message</label>
         <textarea id="output-1" class="textarea break-all" disabled>{{ encrypted_output }}</textarea>
-        <button type="button" id="copy-1" class="btn mt-2"{% if not encrypted_output %} disabled{% endif %}>Copy to clipboard</button>
+        <button type="button" id="copy-1" class="btn mt-2">Copy to clipboard</button>
       </fieldset>
     </form>
   </div>
@@ -62,21 +50,18 @@
     <h3 class="font-semibold">Decrypt</h3>
     <form method="post" id="decrypt-form">
       <fieldset class="fieldset pt-4 pb-0">
-        <label for="encrypted-message" class="label">Message (optional)</label>
-        <textarea id="encrypted-message" name="encrypted_message" class="textarea" spellcheck="false"></textarea>
-        <label for="password-2" class="label">Password</label>
-        <input type="password" id="password-2" name="password" class="input" value="{{ password }}" required>
+        <textarea id="encrypted-message" name="encrypted_message" class="textarea" placeholder="Message (optional)" spellcheck="false"></textarea>
+        <input type="password" name="password" class="input mt-2" value="{{ password }}" placeholder="Password" required>
         <label class="label">
-          <input type="checkbox" name="return_password_2" class="checkbox checkbox-sm"{% if password %} checked{% endif %}>
+          <input type="checkbox" name="return_password_2" class="checkbox"{% if password %} checked{% endif %}>
           Return password
-        </label>        
+        </label>
         <button type="submit" class="btn btn-primary my-2">
           <span>Decrypt</span>
           <span class="loading loading-spinner hidden"></span>
         </button>
-        <label for="output-2" class="label">Decrypted message</label>
         <textarea id="output-2" class="textarea break-all" disabled>{{ decrypted_output }}</textarea>
-        <button type="button" id="copy-2" class="btn mt-2"{% if not decrypted_output %} disabled{% endif %}>Copy to clipboard</button>
+        <button type="button" id="copy-2" class="btn mt-2">Copy to clipboard</button>
       </fieldset>
     </form>
   </div>
