@@ -1,52 +1,57 @@
 {% extends 'base.html' %}
 {% block main %}
-<div class="py-1 px-2 sticky top-0 z-20 bg-base-100/80 backdrop-blur-md">
-  <div class="max-w-2xl mx-auto flex justify-between items-center gap-1">
-    <div class="flex items-center gap-1 truncate">
-      <a href="/" class="btn btn-ghost btn-circle btn-sm">
-        <img src="/static/img/arrow_back.svg" alt="Back">
-      </a>
-      <a href="/3/{{ name }}" class="link link-hover text-sm truncate">{{ name }}</a>
+<div class="max-w-2xl mx-auto pb-10">
+  <div class="bg-base-100/90 backdrop-blur-sm sticky top-0 z-20">
+    <div class="py-1 px-2 flex justify-between items-center">
+      <div class="flex items-center gap-0.5 sm:gap-1 max-sm:truncate">
+        <a href="/" class="btn btn-ghost btn-circle max-sm:btn-sm">
+          <img src="/static/img/arrow_back.svg" alt="Back">
+        </a>
+        <a href="/3/{{ name }}" class="link link-hover text-[0.75rem] sm:text-sm max-sm:truncate">{{ name }}</a>
+      </div>
+      <div class="flex items-center gap-0.5 sm:gap-1">
+        <button class="btn max-sm:btn-sm" onclick="encrypt_modal.showModal()">Encrypt</button>
+        <button class="btn max-sm:btn-sm" onclick="decrypt_modal.showModal()">Decrypt</button>
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" role="button" class="btn btn-ghost btn-circle max-sm:btn-sm">
+            <img src="/static/img/dots_vertical.svg" alt="More">
+          </div>
+          <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+            <li><a>Parameters</a></li>
+            <li><a>Delete chat</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="flex gap-1">
-      <button class="btn sm:px-7" onclick="encrypt_modal.showModal()">Encrypt</button>
-      <button class="btn sm:px-7" onclick="decrypt_modal.showModal()">Decrypt</button>
+  </div>
+  <div class="pt-2 px-2">
+    {% for sender, message, type in messages %}
+    <div class="chat {% if sender == 1 %}chat-end{% else %}chat-start{% endif %}{% if type == 'e' %} break-all{% endif %}">
+      <div class="chat-bubble{% if sender == 1 %} bg-primary/20{% endif %}">{{ message }}</div>
     </div>
+    {% endfor %}
   </div>
-</div>
-<div class="max-w-2xl mx-auto pt-2 px-2 pb-10">
-  {% for sender, message, type in messages %}
-  {% if sender == 1 %}
-  <div class="chat chat-end{% if type == 'e' %} break-all{% endif %}">
-    <div class="chat-bubble bg-secondary/25">{{ message }}</div>
-  </div>
-  {% elif sender == 2 %}
-  <div class="chat chat-start{% if type == 'e' %} break-all{% endif %}">
-    <div class="chat-bubble">{{ message }}</div>
-  </div>
-  {% endif %}
-  {% endfor %}
 </div>
 <dialog id="encrypt_modal" class="modal"{% if encrypted_output %} open{% endif %}>
   <div class="modal-box max-w-md p-5">
     <h3 class="font-semibold">Encrypt</h3>
     <form method="post" id="encrypt-form">
       <fieldset class="fieldset pt-4 pb-0">
-        <label class="label">Message</label>
-        <textarea name="message" class="textarea" spellcheck="false" required>{{ message }}</textarea>
-        <label class="label">Password</label>
-        <input type="password" name="password" class="input" value="{{ password }}" required>
+        <label for="message" class="label">Message</label>
+        <textarea id="message" name="message" class="textarea" spellcheck="false" required></textarea>
+        <label for="password-1" class="label">Password</label>
+        <input type="password" id="password-1" name="password" class="input" value="{{ password }}" required>
         <label class="label">
-          <input type="checkbox" name="return_password_1" class="checkbox checkbox-sm">
+          <input type="checkbox" name="return_password_1" class="checkbox checkbox-sm"{% if password %} checked{% endif %}>
           Return password
         </label>
-        <button type="submit" class="btn btn-secondary my-2">
+        <button type="submit" class="btn btn-primary my-2">
           <span>Encrypt</span>
           <span class="loading loading-spinner hidden"></span>
         </button>
-        <label class="label">Encrypted message</label>
+        <label for="output-1" class="label">Encrypted message</label>
         <textarea id="output-1" class="textarea break-all" disabled>{{ encrypted_output }}</textarea>
-        <button type="button" id="copy-1" class="btn mt-2">Copy to clipboard</button>
+        <button type="button" id="copy-1" class="btn mt-2"{% if not encrypted_output %} disabled{% endif %}>Copy to clipboard</button>
       </fieldset>
     </form>
   </div>
@@ -57,21 +62,21 @@
     <h3 class="font-semibold">Decrypt</h3>
     <form method="post" id="decrypt-form">
       <fieldset class="fieldset pt-4 pb-0">
-        <label class="label">Message (optional)</label>
-        <textarea name="encrypted_message" class="textarea" spellcheck="false">{{ encrypted_message }}</textarea>
-        <label class="label">Password</label>
-        <input type="password" name="password" class="input" value="{{ password }}" required>
+        <label for="encrypted-message" class="label">Message (optional)</label>
+        <textarea id="encrypted-message" name="encrypted_message" class="textarea" spellcheck="false"></textarea>
+        <label for="password-2" class="label">Password</label>
+        <input type="password" id="password-2" name="password" class="input" value="{{ password }}" required>
         <label class="label">
-          <input type="checkbox" name="return_password_2" class="checkbox checkbox-sm">
+          <input type="checkbox" name="return_password_2" class="checkbox checkbox-sm"{% if password %} checked{% endif %}>
           Return password
         </label>        
-        <button type="submit" class="btn btn-secondary my-2">
+        <button type="submit" class="btn btn-primary my-2">
           <span>Decrypt</span>
           <span class="loading loading-spinner hidden"></span>
         </button>
-        <label class="label">Decrypted message</label>
+        <label for="output-2" class="label">Decrypted message</label>
         <textarea id="output-2" class="textarea break-all" disabled>{{ decrypted_output }}</textarea>
-        <button type="button" id="copy-2" class="btn mt-2">Copy to clipboard</button>
+        <button type="button" id="copy-2" class="btn mt-2"{% if not decrypted_output %} disabled{% endif %}>Copy to clipboard</button>
       </fieldset>
     </form>
   </div>

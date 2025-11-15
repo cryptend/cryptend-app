@@ -1,7 +1,40 @@
 @import "tailwindcss" source(none);
 @source "../../templates";
-@plugin "daisyui" {
-  themes: dracula --default;
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "cryptend";
+  default: true;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(26% 0.006 286.033);
+  --color-base-200: oklch(37% 0.013 285.805);
+  --color-base-300: oklch(33% 0.013 285.805);
+  --color-base-content: oklch(100% 0 0);
+  --color-primary: oklch(70% 0.183 293.541);
+  --color-primary-content: oklch(0% 0 0);
+  --color-secondary: oklch(70% 0.165 254.624);
+  --color-secondary-content: oklch(0% 0 0);
+  --color-accent: oklch(74% 0.238 322.16);
+  --color-accent-content: oklch(0% 0 0);
+  --color-neutral: oklch(70% 0.015 286.067);
+  --color-neutral-content: oklch(0% 0 0);
+  --color-info: oklch(74% 0.16 232.661);
+  --color-info-content: oklch(29% 0.066 243.157);
+  --color-success: oklch(76% 0.177 163.223);
+  --color-success-content: oklch(37% 0.077 168.94);
+  --color-warning: oklch(82% 0.189 84.429);
+  --color-warning-content: oklch(41% 0.112 45.904);
+  --color-error: oklch(71% 0.194 13.428);
+  --color-error-content: oklch(27% 0.105 12.094);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
 }
 
 @font-face {
@@ -22,7 +55,7 @@
 }
 
 .input, .textarea {
-  @apply w-full;
+  @apply w-full hover:border-base-content/40 focus:border-base-content;
 }
 .label {
   @apply w-fit;
@@ -34,17 +67,18 @@
   @apply text-base;
 }
 .textarea:is(:disabled, [disabled]) {
-  @apply text-base-content/80;
+  @apply text-base-content/70 bg-base-300/70 border-base-300/70;
 }
 .loading-spinner {
-  @apply text-base-content/40;
+  @apply text-base-content/50;
 }
-.stretched-link::after {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-  content: "";
+.card {
+  @apply bg-base-100 border border-base-300 hover:bg-base-300/80 hover:shadow-lg;
+  @apply active:bg-base-300/60 active:border-transparent active:shadow-none;
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-duration: 0.2s;
+}
+.card:focus-visible {
+  @apply outline-solid outline-base-content outline-2 outline-offset-2;
 }

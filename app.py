@@ -91,7 +91,7 @@ def decrypt_message(message: str, key: bytes) -> str:
 
 def generate_chat_name() -> str:
     while True:
-        name = os.urandom(10).hex()
+        name = os.urandom(9).hex()
         path = os.path.join('backup', f'{name}.json')
         if not os.path.exists(path):
             return name
@@ -206,9 +206,9 @@ def create_chat():
         }
         return render_template('create_chat.html', **context)
     context = {
-        'key_size': 1500,
-        'iterations': 60,
-        'memory': 64,
+        'key_size': random.randint(1500, 1510),
+        'iterations': random.randint(60, 65),
+        'memory': random.randint(64, 69),
         'parallelism': 8,
     }
     return render_template('create_chat.html', **context)
@@ -247,7 +247,6 @@ def chat(name):
             message = request.form['message'].strip()
             output = encrypt_message(message, key)
             data['messages'].append([1, output])
-            context['message'] = message
             context['encrypted_output'] = output
             if request.form.get('return_password_1'):
                 context['password'] = password
@@ -259,7 +258,6 @@ def chat(name):
                 data['messages'].append([2, encrypted_message])
             except ValueError:
                 output = ''
-            context['encrypted_message'] = encrypted_message
             context['decrypted_output'] = output
             if request.form.get('return_password_2'):
                 context['password'] = password

@@ -1,28 +1,26 @@
 {% extends 'base.html' %}
 {% block main %}
-<div class="max-w-lg mx-auto px-2 pb-10">
+<div class="max-w-md mx-auto px-2 pb-10">
   <div class="flex justify-center py-2">
     <button class="btn btn-wide" onclick="add_chat_modal.showModal()">Add chat</button>
   </div>
-  <ul class="list bg-base-100 rounded-box shadow-md">
-    {% for name, number in chats %}
-    <li class="list-row p-5 hover:bg-base-200 transition-colors duration-200">
-      <div>
-        <a href="/3/{{ name }}" class="text-lg font-semibold stretched-link">{{ name }}</a>
-        <div class="text-sm text-base-content/60">{{ number }} {% if number == 1 %}message{% else %}messages{% endif %}</div>
-      </div>
-    </li>
-    {% endfor %}
-  </ul>
+  {% for name, number in chats %}
+  <a href="/3/{{ name }}" class="card mt-1.5 overflow-hidden">
+    <div class="card-body">
+      <h2 class="card-title">{{ name }}</h2>
+      <p class="text-sm text-base-content/60">{{ number }} {% if number == 1 %}message{% else %}messages{% endif %}</p>
+    </div>
+  </a>
+  {% endfor %}
 </div>
 <dialog id="add_chat_modal" class="modal">
   <div class="modal-box max-w-md p-5">
     <h3 class="font-semibold">Add chat</h3>
     <form method="post">
       <fieldset class="fieldset pt-4 pb-0">
-        <label class="label">Interlocutor's configuration</label>
-        <textarea name="conf" class="textarea break-all" spellcheck="false" required></textarea>
-        <button type="submit" class="btn btn-secondary mt-2">Add chat</button>
+        <label for="conf" class="label">Interlocutor's configuration</label>
+        <textarea id="conf" name="conf" class="textarea break-all" spellcheck="false" required></textarea>
+        <button type="submit" class="btn btn-primary mt-2">Add chat</button>
       </fieldset>
     </form>
   </div>
