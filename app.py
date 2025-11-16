@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.argon2 import Argon2id
 from flask import Flask, request, render_template, redirect
 
-default_argon2 = {
+argon2_default = {
     'password': b'Cryptend-Password',
     'salt': b'Cryptend-Salt',
     'iterations': 1,
@@ -32,9 +32,9 @@ def get_private_key(salt_b64: str, p: int, password: str) -> int:
     kdf = Argon2id(
         salt=base64.b64decode(salt_b64),
         length=math.floor(p.bit_length() / 8),
-        iterations=default_argon2['iterations'],
-        lanes=default_argon2['lanes'],
-        memory_cost=default_argon2['memory_cost'],
+        iterations=argon2_default['iterations'],
+        lanes=argon2_default['lanes'],
+        memory_cost=argon2_default['memory_cost'],
     )
     return int.from_bytes(kdf.derive(password.encode()))
 
@@ -50,17 +50,16 @@ def get_shared_key(interlocutor_public_key: int, private_key: int, p: int) -> in
 def get_encryption_key(
         salt_b64: str,
         iterations: int,
-        memory: int,
-        parallelism: int,
+        memory_cost: int,
+        lanes: int,
         shared_key: int,
     ) -> bytes:
-    salt = base64.b64decode(salt_b64)
     kdf = Argon2id(
-        salt=salt,
+        salt=base64.b64decode(salt_b64),
         length=32,
         iterations=iterations,
-        lanes=parallelism,
-        memory_cost=memory * 1024,
+        lanes=lanes,
+        memory_cost=memory_cost,
     )
     length = math.ceil(shared_key.bit_length() / 8)
     return kdf.derive(shared_key.to_bytes(length))
@@ -99,13 +98,13 @@ def generate_chat_name() -> str:
 
 def get_default_key() -> bytes:
     kdf = Argon2id(
-        salt=default_argon2['salt'],
+        salt=argon2_default['salt'],
         length=32,
-        iterations=default_argon2['iterations'],
-        lanes=default_argon2['lanes'],
-        memory_cost=default_argon2['memory_cost'],
+        iterations=argon2_default['iterations'],
+        lanes=argon2_default['lanes'],
+        memory_cost=argon2_default['memory_cost'],
     )
-    return kdf.derive(default_argon2['password'])
+    return kdf.derive(argon2_default['password'])
 
 
 def encrypt_configuration(data: dict) -> str:
@@ -123,8 +122,8 @@ def decrypt_configuration(encrypted_conf: str) -> dict:
         'public_key',
         'salt',
         'iterations',
-        'memory',
-        'parallelism',
+        'memory_cost',
+        'lanes',
     )
     conf_list = conf.split('_')
     data = {}
@@ -181,8 +180,8 @@ def create_chat():
     if request.method == 'POST':
         key_size = int(request.form['key_size'])
         iterations = int(request.form['iterations'])
-        memory = int(request.form['memory'])
-        parallelism = int(request.form['parallelism'])
+        memory_cost_mib = int(request.form['memory_cost'])
+        lanes = int(request.form['lanes'])
         password = request.form['password']
         g, p = generate_dh_parameters(key_size)
         salt_b64 = generate_salt_b64()
@@ -194,23 +193,23 @@ def create_chat():
             'public_key': public_key,
             'salt': salt_b64,
             'iterations': iterations,
-            'memory': memory,
-            'parallelism': parallelism,
+            'memory_cost': memory_cost_mib * 1024,
+            'lanes': lanes,
         }
         conf = encrypt_configuration(data)
         context = {
             'key_size': key_size,
             'iterations': iterations,
-            'memory': memory,
-            'parallelism': parallelism,
+            'memory_cost': memory_cost_mib,
+            'lanes': lanes,
             'conf': conf,
         }
         return render_template('create_chat.html', **context)
     context = {
         'key_size': random.randint(1500, 1510),
         'iterations': random.randint(60, 65),
-        'memory': random.randint(64, 69),
-        'parallelism': 8,
+        'memory_cost': random.randint(64, 69),
+        'lanes': 8,
     }
     return render_template('create_chat.html', **context)
 
@@ -240,8 +239,8 @@ def chat(name):
         key = get_encryption_key(
             data['salt'],
             data['iterations'],
-            data['memory'],
-            data['parallelism'],
+            data['memory_cost'],
+            data['lanes'],
             shared_key,
         )
         if 'message' in request.form:

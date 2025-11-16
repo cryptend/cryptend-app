@@ -8,9 +8,9 @@
     <div class="label">Iterations</div>
     <input type="number" name="iterations" class="input" min="10" value="{{ iterations }}" required>
     <div class="label">Memory [MiB]</div>
-    <input type="number" name="memory" class="input" min="64" value="{{ memory }}" required>
+    <input type="number" name="memory_cost" class="input" min="64" value="{{ memory_cost }}" required>
     <div class="label">Parallelism</div>
-    <input type="number" name="parallelism" class="input" min="4" value="{{ parallelism }}" required>
+    <input type="number" name="lanes" class="input" min="4" value="{{ lanes }}" required>
     <input type="password" name="password" class="input mt-2" placeholder="Password" required>
     <button type="submit" class="btn btn-primary my-2">
       <span>Create configuration</span>

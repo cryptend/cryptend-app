@@ -55,7 +55,7 @@
 }
 
 .input, .textarea {
-  @apply w-full;
+  @apply w-full placeholder-base-content/60;
 }
 .label {
   @apply w-fit;
@@ -67,13 +67,13 @@
   @apply text-base;
 }
 .textarea:is(:disabled, [disabled]) {
-  @apply text-base-content/70 bg-base-300/70 border-base-300/70;
+  @apply text-base-content/90 bg-base-300/60 border-transparent;
 }
 .loading-spinner {
   @apply text-base-content/50;
 }
 .card {
-  @apply bg-base-100 border border-base-300 hover:bg-base-300/80 hover:shadow-lg;
+  @apply bg-base-100 border border-base-300 hover:bg-base-300/80 hover:shadow-md;
   @apply active:bg-base-300/60 active:border-transparent active:shadow-none;
   transition-property: color, background-color, border-color, box-shadow;
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
