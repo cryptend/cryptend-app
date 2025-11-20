@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 {% block main %}
 <form method="post" id="create-chat-form" class="px-2 pb-10">
-  <fieldset class="fieldset max-w-md mx-auto border border-base-300 rounded-box p-5">
+  <fieldset class="fieldset max-w-md mx-auto border border-base-200/70 rounded-box p-5">
     <legend class="fieldset-legend">Create chat</legend>
     <div class="label">Key size [Bit]</div>
-    <input type="number" name="key_size" class="input" min="1024" max="2048" value="{{ key_size }}" required>
+    <div><input type="number" name="key_size" class="input" min="1024" max="2048" value="{{ key_size }}" required></div>
     <div class="label">Iterations</div>
-    <input type="number" name="iterations" class="input" min="10" value="{{ iterations }}" required>
+    <div><input type="number" name="iterations" class="input" min="10" value="{{ iterations }}" required></div>
     <div class="label">Memory [MiB]</div>
-    <input type="number" name="memory_cost" class="input" min="64" value="{{ memory_cost }}" required>
+    <div><input type="number" name="memory_cost" class="input" min="64" value="{{ memory_cost }}" required></div>
     <div class="label">Parallelism</div>
-    <input type="number" name="lanes" class="input" min="4" value="{{ lanes }}" required>
+    <div><input type="number" name="lanes" class="input" min="4" value="{{ lanes }}" required></div>
     <input type="password" name="password" class="input mt-2" placeholder="Password" required>
     <button type="submit" class="btn btn-primary my-2">
       <span>Create configuration</span>

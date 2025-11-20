@@ -2,14 +2,62 @@
 
 End-to-end encrypted messaging tool for desktop.
 
-## Installing
+## Installation
 
 ### Windows
 
-1. Install [Python](https://www.python.org/downloads/) (Check "Add python.exe to PATH")
-2. Download [Cryptend](https://github.com/cryptend/cryptend-app/archive/refs/heads/main.zip) and unzip it
-3. Run `install.bat`
-4. Run `Cryptend.bat`
+Install [Git](https://git-scm.com/install/windows)
+
+Install [Python](https://www.python.org/downloads/) (Add python.exe to PATH)
+
+Open a terminal and clone the repository:
+
+```bash
+git clone https://github.com/cryptend/cryptend-app.git
+```
+
+Run `install.bat` and `Cryptend.bat` or enter the commands:
+
+```bash
+cd cryptend-app
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+flask run
+```
+
+Open `http://127.0.0.1:5000/`
+
+Update:
+
+```bash
+git pull
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### macOS
+
+Install [Homebrew](https://brew.sh/) if you don't already have it, then:
+
+```bash
+brew update
+brew install git python
+git clone https://github.com/cryptend/cryptend-app.git
+cd cryptend-app
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+flask run
+```
+
+Update:
+
+```bash
+git pull
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
 ### Ubuntu
 
@@ -22,6 +70,14 @@ python3 -m venv venv
 . venv/bin/activate
 pip install -r requirements.txt
 flask run
+```
+
+Update:
+
+```bash
+git pull
+. venv/bin/activate
+pip install -r requirements.txt
 ```
 
 ## Usage
@@ -39,10 +95,10 @@ flask run
 
 ## Dependencies
 
-- [cryptography](https://github.com/pyca/cryptography)
 - [Flask](https://github.com/pallets/flask)
+- [cryptography](https://github.com/pyca/cryptography)
 
-### Development
+### Development dependencies
 
 - [tailwindcss](https://github.com/tailwindlabs/tailwindcss)
-- [daisyui](https://github.com/saadeghi/daisyui)
+- [daisyUI](https://github.com/saadeghi/daisyui)

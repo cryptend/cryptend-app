@@ -3,22 +3,22 @@
 <div class="max-w-2xl mx-auto pb-10">
   <div class="bg-base-100/90 backdrop-blur-sm sticky top-0 z-20">
     <div class="py-1 px-2 flex justify-between items-center">
-      <div class="flex items-center gap-0.5 sm:gap-1 max-sm:truncate">
+      <div class="flex items-center gap-0 sm:gap-1 max-sm:truncate">
         <a href="/" class="btn btn-ghost btn-circle max-sm:btn-sm">
           <img src="/static/img/arrow_back.svg" alt="Back">
         </a>
         <a href="/3/{{ name }}" class="link link-hover text-[0.8125rem] sm:text-sm max-sm:truncate">{{ name }}</a>
       </div>
       <div class="flex items-center gap-1">
-        <button class="btn px-3 sm:px-7" onclick="encrypt_modal.showModal()">Encrypt</button>
-        <button class="btn px-3 sm:px-7" onclick="decrypt_modal.showModal()">Decrypt</button>
+        <button class="btn px-2.5 sm:px-7" onclick="encrypt_modal.showModal()">Encrypt</button>
+        <button class="btn px-2.5 sm:px-7" onclick="decrypt_modal.showModal()">Decrypt</button>
       </div>
     </div>
   </div>
   <div class="pt-2 px-2">
     {% for sender, message, type in messages %}
     <div class="chat {% if sender == 1 %}chat-end{% else %}chat-start{% endif %}{% if type == 'e' %} break-all{% endif %}">
-      <div class="chat-bubble{% if sender == 1 %} bg-primary/20{% endif %}">{{ message }}</div>
+      <div class="chat-bubble{% if sender == 1 %} chat-bubble-secondary{% endif %}">{{ message }}</div>
     </div>
     {% endfor %}
   </div>

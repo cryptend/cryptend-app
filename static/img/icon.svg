@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="500"
+   height="500"
+   viewBox="0 0 132.29166 132.29167"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="icon.svg"
+   inkscape:export-filename="icon.png"
+   inkscape:export-xdpi="49.152"
+   inkscape:export-ydpi="49.152"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.71891834"
+     inkscape:cx="221.16559"
+     inkscape:cy="305.3198"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Слой 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:#292526;stroke-width:0.264583;fill-opacity:1"
+       id="path2"
+       cx="66.145836"
+       cy="66.145836"
+       r="66.145836" />
+    <path
+       id="path1"
+       style="fill:#a683ff;fill-opacity:1;stroke-width:0.187449"
+       d="M 66.021581,19.283643 A 46.862169,46.862169 0 0 0 19.159415,66.145808 46.862169,46.862169 0 0 0 66.021581,113.00802 46.862169,46.862169 0 0 0 112.28001,73.643755 H 83.20169 A 18.744869,18.744869 0 0 1 66.021581,84.890675 18.744869,18.744869 0 0 1 47.276717,66.145808 18.744869,18.744869 0 0 1 66.021581,47.400945 18.744869,18.744869 0 0 1 83.20169,58.647863 h 29.07832 A 46.862169,46.862169 0 0 0 66.021581,19.283643 Z" />
+  </g>
+</svg>
